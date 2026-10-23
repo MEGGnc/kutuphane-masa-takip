@@ -203,6 +203,17 @@ Kapat
 </div>
 
 <script>
+  const SUPABASE_URL =
+"https://lbiaktwswmkeqhcxpihz.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_y57yuONsfLYfvaKjDkcIxQ_qNNXjWRt";
+
+const supabase =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 const buildings=[
 {isim:"📚 Kütüphane",kod:"KTP",adet:50},
