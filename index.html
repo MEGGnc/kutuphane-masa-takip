@@ -1,1 +1,362 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kütüphane</title><link rel="stylesheet" href="style.css"></head><body><div class="top"><h1>📚 Kütüphane Masa Takip</h1><a href="admin.html">Yönetim</a></div><div id="clock"></div><div id="app"></div><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kütüphane Masa Takip</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+padding:20px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+.clock{
+font-size:22px;
+font-weight:bold;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+text-align:center;
+}
+
+.card h2{
+font-size:28px;
+margin-top:10px;
+}
+
+.search{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+margin-bottom:20px;
+font-size:16px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+gap:15px;
+}
+
+.desk{
+padding:20px;
+border-radius:15px;
+text-align:center;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+.desk:hover{
+transform:scale(1.05);
+}
+
+.bos{
+background:#16a34a;
+}
+
+.dolu{
+background:#dc2626;
+}
+
+.arada{
+background:#f59e0b;
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+display:none;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.modal-content{
+background:#1e293b;
+max-width:450px;
+width:100%;
+border-radius:15px;
+padding:20px;
+}
+
+button{
+padding:12px;
+width:100%;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>📚 Akıllı Kütüphane Sistemi</h1>
+<div class="clock" id="clock"></div>
+</div>
+
+<div class="stats">
+
+<div class="card">
+Toplam Masa
+<h2>100</h2>
+</div>
+
+<div class="card">
+Boş
+<h2 id="bosSayisi">70</h2>
+</div>
+
+<div class="card">
+Dolu
+<h2 id="doluSayisi">20</h2>
+</div>
+
+<div class="card">
+Arada
+<h2 id="aradaSayisi">10</h2>
+</div>
+
+</div>
+
+<input
+class="search"
+id="search"
+placeholder="Masa ara..."
+onkeyup="filtrele()"
+>
+
+<div class="grid" id="deskGrid"></div>
+
+<div class="modal" id="modal">
+
+<div class="modal-content">
+
+<h2 id="modalTitle"></h2>
+
+<div id="modalInfo"></div>
+
+<input
+id="studentNo"
+placeholder="Öğrenci No Gir"
+>
+
+<button onclick="masaAl()">
+Masayı Kullan
+</button>
+
+<button onclick="closeModal()">
+Kapat
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const masas=[];
+
+for(let i=1;i<=100;i++){
+
+let durum="bos";
+
+if(i%7===0) durum="dolu";
+if(i%11===0) durum="arada";
+
+masas.push({
+kod:"M"+String(i).padStart(3,"0"),
+durum
+});
+
+}
+
+let seciliMasa=null;
+
+function render(){
+
+const alan=
+document.getElementById("deskGrid");
+
+alan.innerHTML="";
+
+masas.forEach(m=>{
+
+const div=
+document.createElement("div");
+
+div.className=
+"desk "+m.durum;
+
+div.innerHTML=
+`
+${m.kod}
+<br><br>
+${m.durum.toUpperCase()}
+`;
+
+div.onclick=()=>ac(m);
+
+alan.appendChild(div);
+
+});
+
+}
+
+function ac(masa){
+
+seciliMasa=masa;
+
+document
+.getElementById("modal")
+.style.display="flex";
+
+document
+.getElementById("modalTitle")
+.innerHTML=masa.kod;
+
+if(masa.durum==="dolu"){
+
+document
+.getElementById("modalInfo")
+.innerHTML=`
+🔴 Kullanımda<br><br>
+Öğrenci:
+202*****45<br><br>
+Başlangıç:
+18:42<br><br>
+Geçen Süre:
+2 Saat 17 Dakika
+`;
+
+}else if(masa.durum==="arada"){
+
+document
+.getElementById("modalInfo")
+.innerHTML=`
+🟡 Öğrenci Arada<br><br>
+Kalan Süre:
+08:54
+`;
+
+}else{
+
+document
+.getElementById("modalInfo")
+.innerHTML=
+"🟢 Masa Kullanılabilir";
+
+}
+
+}
+
+function closeModal(){
+
+document
+.getElementById("modal")
+.style.display="none";
+
+}
+
+function masaAl(){
+
+let no=
+document
+.getElementById("studentNo")
+.value;
+
+if(!no){
+
+alert("Öğrenci numarası gir.");
+
+return;
+}
+
+alert(
+seciliMasa.kod+
+" başarıyla alındı."
+);
+
+}
+
+function filtrele(){
+
+const aranacak=
+document
+.getElementById("search")
+.value
+.toLowerCase();
+
+document
+.querySelectorAll(".desk")
+.forEach(d=>{
+
+d.style.display=
+d.innerText
+.toLowerCase()
+.includes(aranacak)
+?"block":"none";
+
+});
+
+}
+
+setInterval(()=>{
+
+document
+.getElementById("clock")
+.innerHTML=
+new Date()
+.toLocaleString("tr-TR");
+
+},1000);
+
+render();
+
+</script>
+
+</body>
+</html>
