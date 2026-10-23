@@ -6,24 +6,12 @@
 <title>Akıllı Kütüphane Sistemi</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
 
 body{
+background:linear-gradient(135deg,#0f172a,#1e3a8a);
 min-height:100vh;
-padding:25px;
-background:
-linear-gradient(
-135deg,
-#0f172a,
-#172554,
-#1e3a8a
-);
+padding:20px;
 color:white;
 }
 
@@ -31,68 +19,41 @@ color:white;
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:30px;
 flex-wrap:wrap;
 gap:15px;
+margin-bottom:20px;
 }
 
 .logo{
-font-size:36px;
+font-size:32px;
 font-weight:bold;
 }
 
 .clock{
 background:rgba(255,255,255,.08);
+padding:15px;
+border-radius:16px;
 backdrop-filter:blur(10px);
-padding:15px 25px;
-border-radius:15px;
-text-align:center;
-font-size:18px;
 }
 
 .stats{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
 gap:15px;
-margin-bottom:30px;
+margin-bottom:20px;
 }
 
 .card{
 background:rgba(255,255,255,.08);
 backdrop-filter:blur(10px);
-border-radius:20px;
 padding:20px;
+border-radius:20px;
 text-align:center;
-border:1px solid rgba(255,255,255,.1);
 }
 
 .card h2{
+font-size:35px;
 margin-top:10px;
-font-size:34px;
-}
-
-.progress{
-width:100%;
-height:20px;
-background:#1e293b;
-border-radius:20px;
-overflow:hidden;
-margin-top:10px;
-}
-
-.progress-bar{
-width:0%;
-height:100%;
-background:#22c55e;
-}
-
-.search{
-width:100%;
-padding:15px;
-border:none;
-border-radius:15px;
-margin-bottom:20px;
-font-size:17px;
 }
 
 .grid{
@@ -107,9 +68,8 @@ backdrop-filter:blur(10px);
 padding:25px;
 border-radius:20px;
 cursor:pointer;
-transition:.3s;
 text-align:center;
-border:1px solid rgba(255,255,255,.1);
+transition:.3s;
 }
 
 .building:hover{
@@ -118,129 +78,115 @@ transform:translateY(-3px);
 
 .masaGrid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:15px;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+gap:12px;
 margin-top:20px;
 }
 
 .masa{
 background:#16a34a;
-padding:20px;
-border-radius:15px;
+padding:18px;
+border-radius:14px;
 text-align:center;
-font-weight:bold;
 cursor:pointer;
+font-weight:bold;
 }
 
 .backBtn{
-padding:12px 25px;
+padding:12px 20px;
 border:none;
-border-radius:15px;
 background:#2563eb;
 color:white;
+border-radius:12px;
 cursor:pointer;
-margin-bottom:15px;
+margin-bottom:20px;
 }
 
 .modal{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.8);
+background:rgba(0,0,0,.75);
 display:none;
 justify-content:center;
 align-items:center;
-padding:20px;
 }
 
 .modalBox{
 background:#0f172a;
 padding:25px;
 border-radius:20px;
-width:100%;
+width:90%;
 max-width:450px;
 }
 
-.modal input{
+input{
 width:100%;
 padding:12px;
-border:none;
-border-radius:10px;
 margin-top:15px;
+border-radius:10px;
+border:none;
 }
 
-.modal button{
+button{
 width:100%;
 padding:12px;
 margin-top:10px;
 border:none;
-border-radius:10px;
 background:#2563eb;
 color:white;
+border-radius:10px;
 cursor:pointer;
 }
 
+.user{
+background:rgba(255,255,255,.08);
+padding:15px;
+border-radius:15px;
+margin-bottom:20px;
+display:none;
+}
 </style>
 </head>
-
 <body>
 
 <div class="header">
-
-<div class="logo">
-📚 Akıllı Kütüphane Sistemi
-</div>
-
+<div class="logo">📚 Akıllı Kütüphane Sistemi</div>
 <div class="clock" id="clock"></div>
-
 </div>
+
+<div class="user" id="userBox"></div>
 
 <div class="stats">
-
 <div class="card">
 💺
-<h2>100</h2>
+<h2>140</h2>
 Toplam Masa
 </div>
 
 <div class="card">
-🟢
-<h2>100</h2>
-Müsait Masa
+🏢
+<h2>5</h2>
+Bina
 </div>
 
 <div class="card">
-📊
-<h2>%0</h2>
-Doluluk
-<div class="progress">
-<div class="progress-bar"></div>
+🟢
+<h2>140</h2>
+Müsait
 </div>
 </div>
 
-</div>
-
-<input
-class="search"
-id="search"
-placeholder="Bina ara..."
-onkeyup="arama()"
->
-
-<div id="anaAlan"></div>
+<div id="app"></div>
 
 <div class="modal" id="modal">
 
 <div class="modalBox">
 
-<h2 id="masaBaslik"></h2>
-
-<p style="margin-top:15px">
-🟢 Bu masa kullanılabilir.
-</p>
+<h2 id="masaKod"></h2>
 
 <input
-id="ogrenciNo"
-placeholder="Öğrenci Numaranız"
+id="studentNo"
+placeholder="10 Haneli Öğrenci Numarası"
 >
 
 <button onclick="masaAl()">
@@ -257,182 +203,152 @@ Kapat
 
 <script>
 
-const binalar = [
-{
-isim:"📚 Kütüphane",
-kod:"KTP"
-},
-{
-isim:"🏢 Çelik Bina",
-kod:"CLK"
-},
-{
-isim:"📦 Ambar Binası",
-kod:"AMB"
-},
-{
-isim:"🏭 Fabrika Binası",
-kod:"FAB"
-},
-{
-isim:"🔬 Laboratuvar",
-kod:"LAB"
-}
+const buildings=[
+{isim:"📚 Kütüphane",kod:"KTP",adet:50},
+{isim:"🏢 Çelik Bina",kod:"CLK",adet:30},
+{isim:"📦 Ambar Binası",kod:"AMB",adet:20},
+{isim:"🏭 Fabrika Binası",kod:"FAB",adet:20},
+{isim:"🔬 Laboratuvar",kod:"LAB",adet:20}
 ];
 
-let seciliMasa = null;
+let selectedDesk="";
 
-function saatGuncelle(){
+function updateClock(){
+const now=new Date();
 
-const t = new Date();
-
-document.getElementById("clock")
-.innerHTML = `
-📅 ${t.toLocaleDateString('tr-TR')}
+document.getElementById("clock").innerHTML=
+`
+📅 ${now.toLocaleDateString("tr-TR")}
 <br>
-⏰ ${t.toLocaleTimeString('tr-TR')}
+⏰ ${now.toLocaleTimeString("tr-TR")}
 `;
-
 }
 
-setInterval(saatGuncelle,1000);
-saatGuncelle();
+setInterval(updateClock,1000);
+updateClock();
 
-function kategorileriGoster(){
+function showBuildings(){
 
-const alan =
-document.getElementById("anaAlan");
+let html='<div class="grid">';
 
-let html =
-'<div class="grid" id="kategoriGrid">';
+buildings.forEach(b=>{
 
-binalar.forEach(b=>{
+html+=`
+<div class="building"
+onclick="showDesks('${b.kod}',${b.adet},'${b.isim}')">
 
-html += `
-<div
-class="building"
-onclick="masalariGoster('${b.kod}','${b.isim}')"
->
 <h2>${b.isim}</h2>
 <br>
-20 Masa
+${b.adet} Masa
+
 </div>
 `;
 
 });
 
-html += '</div>';
+html+='</div>';
 
-alan.innerHTML = html;
-
+document.getElementById("app").innerHTML=html;
 }
 
-function masalariGoster(kod,isim){
+function showDesks(code,count,title){
 
-let html = `
-<button
-class="backBtn"
-onclick="kategorileriGoster()"
->
+let html=`
+<button class="backBtn"
+onclick="showBuildings()">
 ← Geri
 </button>
 
-<h2>${isim}</h2>
+<h2>${title}</h2>
 
 <div class="masaGrid">
 `;
 
-for(let i=1;i<=20;i++){
+for(let i=1;i<=count;i++){
 
-html += `
-<div
-class="masa"
-onclick="masaSec('${kod}-${String(i).padStart(3,'0')}')"
->
-${kod}-${String(i).padStart(3,'0')}
-<br><br>
+html+=`
+<div class="masa"
+onclick="selectDesk('${code}-${String(i).padStart(3,'0')}')">
+
+${code}-${String(i).padStart(3,'0')}
+<br>
 BOŞ
+
 </div>
 `;
 
 }
 
-html += '</div>';
+html+='</div>';
 
-document.getElementById("anaAlan")
-.innerHTML = html;
-
+document.getElementById("app").innerHTML=html;
 }
 
-function masaSec(kod){
+function selectDesk(code){
 
-seciliMasa = kod;
+selectedDesk=code;
 
-document.getElementById(
-"masaBaslik"
-).innerHTML = kod;
+document.getElementById("masaKod").innerText=code;
 
-document.getElementById(
-"modal"
-).style.display = "flex";
-
+document.getElementById("modal").style.display="flex";
 }
 
 function kapat(){
-
-document.getElementById(
-"modal"
-).style.display = "none";
-
+document.getElementById("modal").style.display="none";
 }
 
 function masaAl(){
 
-const no =
-document.getElementById(
-"ogrenciNo"
-).value;
+let no=
+document.getElementById("studentNo")
+.value.trim();
 
-if(!no){
-
-alert(
-"Öğrenci numarası giriniz."
-);
-
+if(!/^[0-9]{10}$/.test(no)){
+alert("Öğrenci numarası tam 10 haneli olmalıdır.");
 return;
-
 }
 
-alert(
-seciliMasa +
-" seçildi.\n\nÖğrenci: " +
+const existing=
+localStorage.getItem("aktif_ogrenci");
+
+if(existing===no){
+alert("Bu öğrenci zaten aktif bir masa kullanıyor.");
+return;
+}
+
+localStorage.setItem(
+"aktif_ogrenci",
 no
 );
 
+document.getElementById("userBox").style.display="block";
+
+document.getElementById("userBox").innerHTML=
+`
+✅ Giriş Yapıldı
+
+<br><br>
+
+Öğrenci:
+${no}
+
+<br>
+
+Aktif Masa:
+${selectedDesk}
+`;
+
+alert(
+selectedDesk+
+" başarıyla alındı."
+);
+
+kapat();
+
 }
 
-function arama(){
-
-const metin =
-document.getElementById("search")
-.value.toLowerCase();
-
-document.querySelectorAll(".building")
-.forEach(k=>{
-
-k.style.display =
-k.innerText.toLowerCase()
-.includes(metin)
-? "block"
-: "none";
-
-});
-
-}
-
-kategorileriGoster();
+showBuildings();
 
 </script>
-
 </body>
 </html>
