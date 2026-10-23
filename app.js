@@ -1,0 +1,1 @@
+setInterval(()=>{document.getElementById("clock").innerText=new Date().toLocaleString("tr-TR")},1000);document.getElementById("app").innerHTML=`<div class="card"><h3>Planlanan Özellikler</h3><ul><li>Tek öğrenci tek masa</li><li>15 dk ara sistemi</li><li>QR kod</li><li>Supabase entegrasyonu</li></ul></div>`;

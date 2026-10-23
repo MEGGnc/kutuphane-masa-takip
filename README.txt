@@ -1,0 +1,1 @@
+SUPABASE_URL ve Publishable Key app.js içine eklenecek.
