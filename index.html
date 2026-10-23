@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kütüphane Masa Takip</title>
+<title>Akıllı Kütüphane Sistemi</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -14,81 +15,131 @@ font-family:Segoe UI,sans-serif;
 }
 
 body{
-background:#0f172a;
+min-height:100vh;
+padding:25px;
+background:
+linear-gradient(
+135deg,
+#0f172a,
+#172554,
+#1e3a8a
+);
 color:white;
-padding:20px;
 }
 
 .header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:20px;
+margin-bottom:30px;
 flex-wrap:wrap;
+gap:15px;
+}
+
+.logo{
+font-size:36px;
+font-weight:bold;
 }
 
 .clock{
-font-size:22px;
-font-weight:bold;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(10px);
+padding:15px 25px;
+border-radius:15px;
+text-align:center;
+font-size:18px;
 }
 
 .stats{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:15px;
-margin-bottom:20px;
+margin-bottom:30px;
 }
 
 .card{
-background:#1e293b;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(10px);
+border-radius:20px;
 padding:20px;
-border-radius:15px;
 text-align:center;
+border:1px solid rgba(255,255,255,.1);
 }
 
 .card h2{
-font-size:28px;
 margin-top:10px;
+font-size:34px;
+}
+
+.progress{
+width:100%;
+height:20px;
+background:#1e293b;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.progress-bar{
+width:0%;
+height:100%;
+background:#22c55e;
 }
 
 .search{
 width:100%;
 padding:15px;
 border:none;
-border-radius:12px;
+border-radius:15px;
 margin-bottom:20px;
-font-size:16px;
+font-size:17px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:15px;
 }
 
-.desk{
+.building{
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(10px);
+padding:25px;
+border-radius:20px;
+cursor:pointer;
+transition:.3s;
+text-align:center;
+border:1px solid rgba(255,255,255,.1);
+}
+
+.building:hover{
+transform:translateY(-3px);
+}
+
+.masaGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.masa{
+background:#16a34a;
 padding:20px;
 border-radius:15px;
 text-align:center;
 font-weight:bold;
 cursor:pointer;
-transition:.3s;
 }
 
-.desk:hover{
-transform:scale(1.05);
-}
-
-.bos{
-background:#16a34a;
-}
-
-.dolu{
-background:#dc2626;
-}
-
-.arada{
-background:#f59e0b;
+.backBtn{
+padding:12px 25px;
+border:none;
+border-radius:15px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+margin-bottom:15px;
 }
 
 .modal{
@@ -101,63 +152,69 @@ align-items:center;
 padding:20px;
 }
 
-.modal-content{
-background:#1e293b;
-max-width:450px;
+.modalBox{
+background:#0f172a;
+padding:25px;
+border-radius:20px;
 width:100%;
-border-radius:15px;
-padding:20px;
+max-width:450px;
 }
 
-button{
-padding:12px;
+.modal input{
 width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+margin-top:15px;
+}
+
+.modal button{
+width:100%;
+padding:12px;
 margin-top:10px;
 border:none;
 border-radius:10px;
 background:#2563eb;
 color:white;
-font-weight:bold;
 cursor:pointer;
 }
 
-input{
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-margin-top:10px;
-}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<h1>📚 Akıllı Kütüphane Sistemi</h1>
+
+<div class="logo">
+📚 Akıllı Kütüphane Sistemi
+</div>
+
 <div class="clock" id="clock"></div>
+
 </div>
 
 <div class="stats">
 
 <div class="card">
-Toplam Masa
+💺
 <h2>100</h2>
+Toplam Masa
 </div>
 
 <div class="card">
-Boş
-<h2 id="bosSayisi">70</h2>
+🟢
+<h2>100</h2>
+Müsait Masa
 </div>
 
 <div class="card">
-Dolu
-<h2 id="doluSayisi">20</h2>
+📊
+<h2>%0</h2>
+Doluluk
+<div class="progress">
+<div class="progress-bar"></div>
 </div>
-
-<div class="card">
-Arada
-<h2 id="aradaSayisi">10</h2>
 </div>
 
 </div>
@@ -165,30 +222,32 @@ Arada
 <input
 class="search"
 id="search"
-placeholder="Masa ara..."
-onkeyup="filtrele()"
+placeholder="Bina ara..."
+onkeyup="arama()"
 >
 
-<div class="grid" id="deskGrid"></div>
+<div id="anaAlan"></div>
 
 <div class="modal" id="modal">
 
-<div class="modal-content">
+<div class="modalBox">
 
-<h2 id="modalTitle"></h2>
+<h2 id="masaBaslik"></h2>
 
-<div id="modalInfo"></div>
+<p style="margin-top:15px">
+🟢 Bu masa kullanılabilir.
+</p>
 
 <input
-id="studentNo"
-placeholder="Öğrenci No Gir"
+id="ogrenciNo"
+placeholder="Öğrenci Numaranız"
 >
 
 <button onclick="masaAl()">
 Masayı Kullan
 </button>
 
-<button onclick="closeModal()">
+<button onclick="kapat()">
 Kapat
 </button>
 
@@ -198,163 +257,180 @@ Kapat
 
 <script>
 
-const masas=[];
+const binalar = [
+{
+isim:"📚 Kütüphane",
+kod:"KTP"
+},
+{
+isim:"🏢 Çelik Bina",
+kod:"CLK"
+},
+{
+isim:"📦 Ambar Binası",
+kod:"AMB"
+},
+{
+isim:"🏭 Fabrika Binası",
+kod:"FAB"
+},
+{
+isim:"🔬 Laboratuvar",
+kod:"LAB"
+}
+];
 
-for(let i=1;i<=100;i++){
+let seciliMasa = null;
 
-let durum="bos";
+function saatGuncelle(){
 
-if(i%7===0) durum="dolu";
-if(i%11===0) durum="arada";
+const t = new Date();
 
-masas.push({
-kod:"M"+String(i).padStart(3,"0"),
-durum
-});
+document.getElementById("clock")
+.innerHTML = `
+📅 ${t.toLocaleDateString('tr-TR')}
+<br>
+⏰ ${t.toLocaleTimeString('tr-TR')}
+`;
 
 }
 
-let seciliMasa=null;
+setInterval(saatGuncelle,1000);
+saatGuncelle();
 
-function render(){
+function kategorileriGoster(){
 
-const alan=
-document.getElementById("deskGrid");
+const alan =
+document.getElementById("anaAlan");
 
-alan.innerHTML="";
+let html =
+'<div class="grid" id="kategoriGrid">';
 
-masas.forEach(m=>{
+binalar.forEach(b=>{
 
-const div=
-document.createElement("div");
+html += `
+<div
+class="building"
+onclick="masalariGoster('${b.kod}','${b.isim}')"
+>
+<h2>${b.isim}</h2>
+<br>
+20 Masa
+</div>
+`;
 
-div.className=
-"desk "+m.durum;
+});
 
-div.innerHTML=
-`
-${m.kod}
+html += '</div>';
+
+alan.innerHTML = html;
+
+}
+
+function masalariGoster(kod,isim){
+
+let html = `
+<button
+class="backBtn"
+onclick="kategorileriGoster()"
+>
+← Geri
+</button>
+
+<h2>${isim}</h2>
+
+<div class="masaGrid">
+`;
+
+for(let i=1;i<=20;i++){
+
+html += `
+<div
+class="masa"
+onclick="masaSec('${kod}-${String(i).padStart(3,'0')}')"
+>
+${kod}-${String(i).padStart(3,'0')}
 <br><br>
-${m.durum.toUpperCase()}
+BOŞ
+</div>
 `;
-
-div.onclick=()=>ac(m);
-
-alan.appendChild(div);
-
-});
 
 }
 
-function ac(masa){
+html += '</div>';
 
-seciliMasa=masa;
-
-document
-.getElementById("modal")
-.style.display="flex";
-
-document
-.getElementById("modalTitle")
-.innerHTML=masa.kod;
-
-if(masa.durum==="dolu"){
-
-document
-.getElementById("modalInfo")
-.innerHTML=`
-🔴 Kullanımda<br><br>
-Öğrenci:
-202*****45<br><br>
-Başlangıç:
-18:42<br><br>
-Geçen Süre:
-2 Saat 17 Dakika
-`;
-
-}else if(masa.durum==="arada"){
-
-document
-.getElementById("modalInfo")
-.innerHTML=`
-🟡 Öğrenci Arada<br><br>
-Kalan Süre:
-08:54
-`;
-
-}else{
-
-document
-.getElementById("modalInfo")
-.innerHTML=
-"🟢 Masa Kullanılabilir";
+document.getElementById("anaAlan")
+.innerHTML = html;
 
 }
 
+function masaSec(kod){
+
+seciliMasa = kod;
+
+document.getElementById(
+"masaBaslik"
+).innerHTML = kod;
+
+document.getElementById(
+"modal"
+).style.display = "flex";
+
 }
 
-function closeModal(){
+function kapat(){
 
-document
-.getElementById("modal")
-.style.display="none";
+document.getElementById(
+"modal"
+).style.display = "none";
 
 }
 
 function masaAl(){
 
-let no=
-document
-.getElementById("studentNo")
-.value;
+const no =
+document.getElementById(
+"ogrenciNo"
+).value;
 
 if(!no){
 
-alert("Öğrenci numarası gir.");
+alert(
+"Öğrenci numarası giriniz."
+);
 
 return;
+
 }
 
 alert(
-seciliMasa.kod+
-" başarıyla alındı."
+seciliMasa +
+" seçildi.\n\nÖğrenci: " +
+no
 );
 
 }
 
-function filtrele(){
+function arama(){
 
-const aranacak=
-document
-.getElementById("search")
-.value
-.toLowerCase();
+const metin =
+document.getElementById("search")
+.value.toLowerCase();
 
-document
-.querySelectorAll(".desk")
-.forEach(d=>{
+document.querySelectorAll(".building")
+.forEach(k=>{
 
-d.style.display=
-d.innerText
-.toLowerCase()
-.includes(aranacak)
-?"block":"none";
+k.style.display =
+k.innerText.toLowerCase()
+.includes(metin)
+? "block"
+: "none";
 
 });
 
 }
 
-setInterval(()=>{
-
-document
-.getElementById("clock")
-.innerHTML=
-new Date()
-.toLocaleString("tr-TR");
-
-},1000);
-
-render();
+kategorileriGoster();
 
 </script>
 
